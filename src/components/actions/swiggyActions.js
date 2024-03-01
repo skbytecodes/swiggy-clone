@@ -62,3 +62,16 @@ export const cartTotalValue = (payload) => {
     payload
   }
 }
+
+
+export const showDeliveryAddress = () => {
+  return {
+    type: "SHOW_ADDRESS_FORM",
+  };
+};
+
+export const hideDeliveryAddress = () => {
+  return {
+    type: "HIDE_ADDRESS_FORM",
+  };
+};

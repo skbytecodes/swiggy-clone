@@ -4,9 +4,11 @@ import Header from "./Header";
 import LoginPage from "./LoginPage";
 import { showAuthPage } from "./actions/swiggyActions";
 import { useSelector } from "react-redux";
+import DeliveryAddress from "./DeliveryAddress";
 
 function CartContainer() {
   const showAuthPage = useSelector((state) => state.showAuthPage);
+  const isAddressFormOpen = useSelector((state) => state.SHOW_ADDRESS_FORM);
   return (
     <div>
       {showAuthPage ? (
@@ -39,8 +41,20 @@ function CartContainer() {
         </div>
       ) : (
         <div>
+          <DeliveryAddress isOpen={0}/>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 0,
+            }}
+          >
           <Header />
           <Cart />
+          </div>
         </div>
       )}
     </div>

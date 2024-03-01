@@ -20,6 +20,7 @@ import Offers from "./components/Offers";
 import RestaurantItems from "./components/RestaurantItems";
 import RestaurantItemsContainer from "./components/RestaurantItemsContainer";
 import Error from "./components/Error";
+import DeliveryAddress from "./components/DeliveryAddress";
 
 function App() {
   window.globalPrentUrl = "http://localhost:8090";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/help/issues/legal" element={<HelpLegalContainer /> }/>
           <Route path="/help/issues/FAQ" element={<HelpPartnerOnboardingContainer /> }/>
           <Route path="/restaurants/food"  element={<RestaurantItemsContainer />}/>
+          <Route path="/address"  element={<DeliveryAddress />}/>
           <Route path="/error" element={<Error />}/>
         </Routes>
       </div>

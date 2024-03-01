@@ -14,11 +14,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { menuItemClasses } from "@mui/material";
-import { addItem, cartTotalValue, removeItem } from "./actions/swiggyActions";
+import { addItem, cartTotalValue, removeItem, showDeliveryAddress } from "./actions/swiggyActions";
 import Logo from "../images/swiggy-logo.png";
 import { redirect } from "react-router-dom";
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 
 function Cart() {
   const [items, setItems] = useState([]);
@@ -42,10 +42,8 @@ function Cart() {
         `${parentUrl}/api/v1/restaurant/${selectedRestaurant}`
       );
 
-      const authRes = await axios.get(
-        `${parentUrl}/api/v1/login`
-      );
-      console.log("auth response ",authRes)
+      const authRes = await axios.get(`${parentUrl}/api/v1/login`);
+      console.log("auth response ", authRes);
       setAuth(authRes.data);
       setRestaurant(restaurantResponse.data);
 
@@ -63,7 +61,6 @@ function Cart() {
   }, [items]);
 
   const pushItem = async (item) => {
-    debugger;
     dispatch(addItem({ foodId: item.foodId, count: 1 }));
     const response = await axios.get(
       `${parentUrl}/api/v1/foodById/${item.foodId}`
@@ -169,7 +166,10 @@ function Cart() {
     paymentObject.open();
   }
 
-  //
+  function openAddressForm(){
+    dispatch(showDeliveryAddress());
+  }
+
 
   return (
     <>
@@ -200,7 +200,7 @@ function Cart() {
       <div
         className="bg-gray-200 relative flex justify-around"
         // style={{ minHeight: "140vh", paddingTop: "5vh" }}
-        style={{minHeight: "180vh", paddingTop: "5vh" }}
+        style={{ minHeight: "180vh", paddingTop: "5vh" }}
       >
         <div
           className="flex flex-col justify-between"
@@ -224,105 +224,150 @@ function Cart() {
                 </p>
               </div>
             </>
-
           )}
-          {auth != true ? (<>
-          <div
-            className="bg-white flex justify-around items-center ml-5"
-            style={{ height: "32vh" }}
-          >
-            <div
-              className="flex flex-col justify-between"
-              style={{ height: "21vh" }}
-            >
-              <div>
-                <p className="font-bold">Account</p>
-                <p className="text-gray-400" style={{ fontSize: "13px" }}>
-                  To place your order now, log in to your existing account or
-                  sign up.
+          {auth != true ? (
+            <>
+              <div
+                className="bg-white flex justify-around items-center ml-5"
+                style={{ height: "32vh" }}
+              >
+                <div
+                  className="flex flex-col justify-between"
+                  style={{ height: "21vh" }}
+                >
+                  <div>
+                    <p className="font-bold">Account</p>
+                    <p className="text-gray-400" style={{ fontSize: "13px" }}>
+                      To place your order now, log in to your existing account
+                      or sign up.
+                    </p>
+                  </div>
+
+                  <div className="flex">
+                    <div
+                      className="border px-8 py-2 text-center"
+                      style={{ borderColor: "#60b246", color: "#60b246" }}
+                    >
+                      <p className="text-xs">Have an account?</p>
+                      <p className="font-semibold" style={{ fontSize: "13px" }}>
+                        LOG IN
+                      </p>
+                    </div>
+
+                    <div
+                      className="px-8 py-2 text-center text-white ml-7"
+                      style={{ backgroundColor: "#60b246" }}
+                    >
+                      <p className="text-xs">New to Swiggy?</p>
+                      <p className="font-semibold" style={{ fontSize: "13px" }}>
+                        SIGN UP
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <img src={Roll} className="h-32" />
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="h-96 bg-white ml-5 flex flex-col justify-evenly">
+              <div className="ml-8">
+                <p className="text-neutral-900 font-bold">
+                  Select delivery address
+                </p>
+                <p className="text-gray-400">
+                  You have a saved address in this location
                 </p>
               </div>
 
-              <div className="flex">
-                <div
-                  className="border px-8 py-2 text-center"
-                  style={{ borderColor: "#60b246", color: "#60b246" }}
-                >
-                  <p className="text-xs">Have an account?</p>
-                  <p className="font-semibold" style={{ fontSize: "13px" }}>
-                    LOG IN
-                  </p>
-                </div>
+              <div className="flex justify-around">
+                <div className=" flex w-5/12 h-52 justify-evenly py-5  border gray-red-900">
+                  <HomeOutlinedIcon />
+                  <div className="w-5/6 ">
+                    <p>Home</p>
+                    <p className="text-gray-400 text-xs mt-2">
+                      F1 194 4th Floor Madangir, South Delhi, Block F1, Doctor
+                      Ambedkar Nagar, Madangir, New Delhi, Delhi 110062, India
+                    </p>
 
-                <div
-                  className="px-8 py-2 text-center text-white ml-7"
-                  style={{ backgroundColor: "#60b246" }}
-                >
-                  <p className="text-xs">New to Swiggy?</p>
-                  <p className="font-semibold" style={{ fontSize: "13px" }}>
-                    SIGN UP
-                  </p>
+                    <p
+                      className="mt-5 mb-2"
+                      style={{ fontSize: "12px", fontWeight: "bold" }}
+                    >
+                      23 MINS
+                    </p>
+                    <p
+                      className=" text-white w-fit px-2 py-1 hover:cursor-pointer"
+                      style={{ backgroundColor: "#60b246", fontSize: "14px" }}
+                    >
+                      Deliver Here
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div>
-              <img src={Roll} className="h-32" />
-            </div>
-          </div>
-          </>)
-          :(<div className="h-96 bg-white ml-5 flex flex-col justify-evenly">
-            <div className="ml-8">
-              <p className="text-neutral-900 font-bold">Select delivery address</p>
-              <p className="text-gray-400">You have a saved address in this location</p>
-            </div>
-
-            <div className="flex justify-around">
-              <div className=" flex w-5/12 h-52 justify-evenly py-5  border gray-red-900">
-                <HomeOutlinedIcon/>
-                <div className="w-5/6 ">
-                  <p>Home</p>
-                  <p className="text-gray-400 text-xs mt-2">F1 194 4th Floor Madangir, South Delhi, Block F1, Doctor Ambedkar Nagar, Madangir, New Delhi, Delhi 110062, India</p>
-
-                  <p className="mt-5 mb-2" style={{fontSize:"12px", fontWeight:"bold"}}>23 MINS</p>
-                  <p className=" text-white w-fit px-2 py-1 hover:cursor-pointer"  style={{ backgroundColor: "#60b246", fontSize:"14px"}}>Deliver Here</p>
-                </div>
-              </div>
-              <div className=" flex w-5/12 h-52 justify-evenly py-5 border gray-red-900">
-                <FmdGoodOutlinedIcon />
-                <div className="w-5/6">
-                  <p>Add New Address</p>
-                  <p className="text-gray-400 text-xs mt-2">F1/235, Block F1, Doctor Ambedkar Nagar, Madangir, New Delhi, Delhi 110062, India</p>
-                  <p className=" text-white w-fit px-4 py-1 mt-7 hover:cursor-pointer"  style={{ border: "1px solid #60b246",fontSize:"13px", color:"#60b246" }}>ADD NEW</p>
+                <div className=" flex w-5/12 h-52 justify-evenly py-5 border gray-red-900">
+                  <FmdGoodOutlinedIcon />
+                  <div className="w-5/6">
+                    <p>Add New Address</p>
+                    <p className="text-gray-400 text-xs mt-2">
+                      F1/235, Block F1, Doctor Ambedkar Nagar, Madangir, New
+                      Delhi, Delhi 110062, India
+                    </p>
+                    <p
+                      className=" text-white w-fit px-4 py-1 mt-7 hover:cursor-pointer"
+                      style={{
+                        border: "1px solid #60b246",
+                        fontSize: "13px",
+                        color: "#60b246",
+                      }}
+                      onClick={openAddressForm}
+                    >
+                      ADD NEW
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {auth == true ? "" : (<>
-          <div
-            className="bg-white flex items-center p-9 ml-5"
-            style={{ height: "10vh" }}
-          >
-            <p className="font-bold text-gray-400">Delivery address</p>
+          {auth == true ? (
+            ""
+          ) : (
+            <>
+              <div
+                className="bg-white flex items-center p-9 ml-5"
+                style={{ height: "10vh" }}
+              >
+                <p className="font-bold text-gray-400">Delivery address</p>
+              </div>
+            </>
+          )}
+          
+          {
+            auth == true ?
+            (
+          <div className="bg-white h-20 ml-5 flex flex-col justify-center">
+            <div
+              className="flex flex-col justify-center"
+              style={{ backgroundColor: "#60b246", height: "10vh" }}
+              onClick={displayRazorpay}
+            >
+              <p className="text-white font-bold text-center">
+                Proceed To Payment
+              </p>
+            </div>
           </div>
-          </>)}
-          <div
-            className="bg-white flex items-center p-9 ml-5"
-            style={{ height: "10vh" }}
-          >
-            {auth != true ? <p className="font-bold text-gray-400">Payment</p> :
-            <p className="font-bold text-gray-400 text-center"
-            onClick={displayRazorpay}>Proceed To Payment</p>}
-          </div>
-         
-          {/* <div
-            className=" text-white text-lg h-10 font-bold ml-5 flex items-center justify-center hover:cursor-default"
-            style={{ backgroundColor: "#60b246" }}
-            onClick={displayRazorpay}
-          >
-            <p>Proceed To Payment</p>
-          </div> */}
+            ):(
+              <>
+              <div
+                className="bg-white flex items-center p-9 ml-5"
+                style={{ height: "10vh" }}
+              >
+                <p className="font-bold text-gray-400">Payment</p>
+              </div>
+            </>
+            )
+          }
         </div>
 
         {/* cart section */}

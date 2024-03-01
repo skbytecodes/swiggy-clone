@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Logo from "../images/swiggy-logo.png";
+import "../styles/Header.css";
 import {
   ArchiveIcon,
   BadgeCheckIcon,
@@ -22,7 +23,7 @@ const handleSigninBtn = () => {
 }
 
   return (
-    <header className="flex items-center justify-between h-20 bg-white shadow-md">
+    <header id="header" className="flex items-center justify-between h-20 bg-white shadow-md">
       <div className="flex flex-1 items-center space-x-10">
         <Link
           to="/"
